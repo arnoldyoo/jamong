@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsService } from '../../vdk';
+import { GridOptionService } from '../../vdk';
 
 import { ChartComponent } from '../../vdk/charts/chart.component';
 import { ChartConfiguration, OrientType, BrushType, AxisType } from '../../vdk/charts/core/chart-config.type';
@@ -13,62 +14,38 @@ import { NgGrid, NgGridItem } from 'angular2-grid';
     .navbar {
       text-align : center;
     }
-    
+
     .grid {
-    background-color: #efefef ;
-    width: 100%;
-    min-height: 750px;
-}
-
-.grid-item {
-    background-color: #ffffff ;
-    -webkit-transition: width 0.25s, height 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
-    -moz-transition: width 0.25s, height 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
-    -o-transition: width 0.25s, height 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
-    transition: width 0.25s, height 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
-    border: solid 1px;
-}
-
-.grid-item:active, .grid-item.moving {
-    z-index: 2;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
-    transition: none;
-}
-
-.grid-placeholder {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 767px) {
-    .grid {
-        width: 100% !important;
-        height: auto !important;
-        padding: 10px;
+      position: relative;
     }
+
     .grid-item {
-        position: static !important;
-        width: 100% !important;
-        margin-bottom: 10px;
+        position: absolute;
+        border: 1px solid black;
     }
-    .grid-item:last-child {
-        margin-bottom: 0;
-    }
-}
 
+    .grid-item.moving {
+        z-index: z-index + 1;
+    }
+
+    .placeholder {
+        position: absolute;
+    }
+    
   `],
   directives: [ChartComponent, NgGrid, NgGridItem]
 })
 export class AtlierComponent implements OnInit {
   components: any;
   dropdown:any;
+  gridOptions: any;
 
-  constructor(private formsService: FormsService) { }
+  constructor(private formsService: FormsService, private gridOptionService: GridOptionService) { }
 
   chartConfigs: Array<ChartConfiguration> = [];
 
   ngOnInit() {
+    this.gridOptions = this.gridOptionService.getGridOption();
     this.components = this.formsService.getComponents();
     jui.ready([ "ui.dropdown" ], (dropdown: any) => {
     this.dropdown = dropdown("#componentList", {
@@ -109,6 +86,36 @@ export class AtlierComponent implements OnInit {
     ];
 
     this.chartConfigs.push(chartConfig);
+
+    let chartConfig2:ChartConfiguration = {};
+    chartConfig2.brush = [{
+      type: BrushType.Line,
+      target: ["sales", "profit"]
+    }];
+    chartConfig2.axisX = {
+      type: AxisType.Range,
+      domain: [-40, 60],
+      step: 10,
+      line: true
+    };
+    chartConfig2.axisY = {
+      type: AxisType.Block,
+      domain: "quarter",
+      line: true
+    };
+    chartConfig2.data = [
+      { quarter: "1Q", sales: 50, profit: 35 },
+      { quarter: "2Q", sales: -20, profit: -30 },
+      { quarter: "3Q", sales: 10, profit: -5 },
+      { quarter: "4Q", sales: 30, profit: 25 }
+    ];
+    chartConfig2.widget = [
+      { type: "title", text: "Bar Sample" },
+      { type: "tooltip", orient: OrientType.Left },
+      { type: "legend" }
+    ];
+
+    this.chartConfigs.push(chartConfig2);
    }
 
    show(e: any) {

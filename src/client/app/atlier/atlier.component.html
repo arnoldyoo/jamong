@@ -14,19 +14,16 @@
 
 <p></p>
 
-<h1>My First Angular 2 App</h1>
-<div class="grid" [ngGrid]="{'max_cols': 6, 'auto_resize': true}">
-  <div class="grid-item" [ngGridItem]="{'sizex': 2, 'sizey': 3}">
+<div class="grid" [ngGrid]="gridOptions">
+  <div class="grid-item" [ngGridItem]="{'sizex': 4, 'sizey': 4}" *ngFor="let chartConfig of chartConfigs">
+    <jm-chart
+      [configBrush]="chartConfig.brush"
+      [configAxisX]="chartConfig.axisX"
+      [configAxisY]="chartConfig.axisY"
+      [configData]="chartConfig.data"
+      [configWidget]="chartConfig.widget"
+    >
+    </jm-chart>
   </div>
 </div>
 
-<template ngFor let-chartConfig [ngForOf]="chartConfigs">
-  <jm-chart
-    [configBrush]="chartConfig.brush"
-    [configAxisX]="chartConfig.axisX"
-    [configAxisY]="chartConfig.axisY"
-    [configData]="chartConfig.data"
-    [configWidget]="chartConfig.widget"
-  >
-  </jm-chart>
-</template>

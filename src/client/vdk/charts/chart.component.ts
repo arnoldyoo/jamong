@@ -6,7 +6,7 @@ import { ChartConfiguration, Brush, Axis, AxisData, Widget } from './core/chart-
   moduleId: module.id,
   selector: 'jm-chart',
   template: `
-      <div class="{{ uuid }}" style="height: 500px;">
+      <div class="{{ uuid }}" style="height: 100%;">
       </div>
   `
 })

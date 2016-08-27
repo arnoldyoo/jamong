@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FormsService } from './forms/forms.service';
+import { GridOptionService } from './forms/grid/grid.option.service';
 
 @NgModule({
   imports: [ 
@@ -24,7 +25,8 @@ export class VDKModule {
     return {
       ngModule: VDKModule,
       providers: [
-        FormsService
+        FormsService,
+        GridOptionService
       ]
     }
   }
